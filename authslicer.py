@@ -84,7 +84,6 @@ def header_bypass(user_input):
             pass
 
 
-
 def fuzz_header(user_input):
     clear=(user_input.replace("https://",""))
     print(Fore.GREEN,f"Attacking {clear}")
