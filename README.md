@@ -2,7 +2,7 @@
 <img width="500" height="500" alt="044016a3-7ad2-498e-80bb-15f5bc65f587" src="https://github.com/user-attachments/assets/3bdf12ee-6a7e-4e00-9a39-0f691345e336" />
 
 # AuthSlicer
-AuthSlicer is a Python-based tool designed to assist security testers in analyzing web applications and authentication checks.\n 
+AuthSlicer is a Python-based tool designed to assist security testers in analyzing web applications and authentication checks. 
 It provides a flexible framework to test multiple header configurations against a target URL and see how the server responds.
 
 # Features
