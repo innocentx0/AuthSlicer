@@ -136,9 +136,16 @@ async def send_header(session, target, key_payload):
 if __name__ == '__main__':
     try:
         if args.nw:
-            asyncio.run(header_bypass_async(args.url))
+            if not args.url.startswith("http"):
+                print("[!] Missing http?")
+                exit
+            else:
+                asyncio.run(header_bypass_async(args.url))
         else:
-            fuzz_header(args.url)   
+            if not args.url.startswith("http"):
+                print("[!] Missing http?")
+            else:
+                fuzz_header(args.url)   
     except Exception as e:
         print(Fore.RED,f"[!] Error:{e}")
 
