@@ -17,6 +17,9 @@ parser.add_argument('-n', '--nw',
                     action='store_true',
                     help='Disabile WAF-preventions')
 
+parser.add_argument('-p', '--poc',
+                    action='store_true',
+                    help='Generate a ready-to-use proof of concept')
 
 
 args = parser.parse_args()
@@ -73,12 +76,12 @@ def header_bypass(user_input):
         header_request = requests.get(url=target,headers=key_payload)
         sc = (header_request.status_code)
         clear_sc=(user_input.replace("https://",""))
-        if header_request.status_code != 401:
+        if header_request.status_code != 401 and header_request.status_code != 403:
             print(Fore.GREEN,f"[{sc}] {clear_sc} bypassed with payload: {key_payload}")
-            print(Fore.YELLOW, "Here is your Proof of Concept:")
-            clean_payload = str(key_payload).replace('{', '').replace('}', '').replace("'", '"')
-
-            print(Fore.LIGHTYELLOW_EX,f"    [POC] curl -x GET {user_input} --header {clean_payload}")
+            if args.poc:
+                print(Fore.YELLOW, "Here is your Proof of Concept:")
+                clean_payload = str(key_payload).replace('{', '').replace('}', '').replace("'", '"')
+                print(Fore.LIGHTYELLOW_EX,f"    [POC] curl -x GET {user_input} --header {clean_payload}")
         else:
             print(Fore.RED,"[!] Target seems not vulnerable")
             pass
@@ -117,10 +120,11 @@ async def send_header(session, target, key_payload):
             sc = resp.status
             clear_sc = target.replace("https://", "")
 
-            if sc != 401:
+            if sc != 401 and sc != 403:
                 print(Fore.GREEN, f"[{sc}] {clear_sc} bypassed with payload: {key_payload}")
-                clean_payload = str(key_payload).replace('{', '').replace('}', '').replace("'", '"')
-                print(Fore.LIGHTYELLOW_EX, f"    [POC] curl -x GET {target} --header {clean_payload}")
+                if args.poc:
+                    clean_payload = str(key_payload).replace('{', '').replace('}', '').replace("'", '"')
+                    print(Fore.LIGHTYELLOW_EX, f"    [POC] curl -x GET {target} --header {clean_payload}")
             elif sc == 429:
                 print(Fore.RED,"[429] Too many requests!")
             else:
