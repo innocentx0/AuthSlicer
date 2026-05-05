@@ -114,21 +114,22 @@ async def header_bypass_async(user_input):
         await asyncio.gather(*tasks)
 
 
-async def send_header(session, target, key_payload):
+async def send_header(session, targets:list[str], key_payload):
     try:
-        async with session.get(target, headers=key_payload) as resp:
-            sc = resp.status
-            clear_sc = target.replace("https://", "")
+        async for target in targets:
+            with session.get(target, headers=key_payload) as resp:
+                sc = resp.status
+                clear_sc = target.replace("https://", "")
 
-            if sc != 401 and sc != 403:
-                print(Fore.GREEN, f"[{sc}] {clear_sc} bypassed with payload: {key_payload}")
-                if args.poc:
-                    clean_payload = str(key_payload).replace('{', '').replace('}', '').replace("'", '"')
-                    print(Fore.LIGHTYELLOW_EX, f"    [POC] curl -x GET {target} --header {clean_payload}")
-            elif sc == 429:
-                print(Fore.RED,"[429] Too many requests!")
-            else:
-                print(Fore.RED, "[!] Not bypassed", key_payload)
+                if sc != 401 and sc != 403:
+                    print(Fore.GREEN, f"[{sc}] {clear_sc} bypassed with payload: {key_payload}")
+                    if args.poc:
+                        clean_payload = str(key_payload).replace('{', '').replace('}', '').replace("'", '"')
+                        print(Fore.LIGHTYELLOW_EX, f"    [POC] curl -x GET {target} --header {clean_payload}")
+                elif sc == 429:
+                    print(Fore.RED,"[429] Too many requests!")
+                else:
+                    print(Fore.RED, "[!] Not bypassed", key_payload)
 
     except Exception as e:
         print(Fore.RED, f"[!] Error: {e}")
