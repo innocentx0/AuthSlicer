@@ -15,7 +15,7 @@ It provides a flexible framework to test multiple header configurations against 
 
 # Installation
 ```
-git clone https://github.com/yourusername/AuthSlicer.git
+git clone https://github.com/innocentx0/AuthSlicer.git
 cd AuthSlicer
 pip install -r requirements.txt
 ```
